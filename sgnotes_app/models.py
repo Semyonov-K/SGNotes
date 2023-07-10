@@ -20,7 +20,7 @@ class Note(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     deadline = db.Column(db.DateTime, nullable=True)
     is_done = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_nickname = db.Column(db.Integer, db.ForeignKey('user.nickname'))
 
     def __repr__(self):
         return '<Заметка %r>' % (self.title)
