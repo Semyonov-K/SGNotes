@@ -1,18 +1,33 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf-8">
-    <meta name="author", content="FixerSibg">
-    <meta name="description", content="main page">
-    <meta name="keywords", content="note, board">
-    <title>Личные заметки</title>
-  </head>
-  <body>
-    <label for="search"></label>
-    <input type="search" placeholder="Поиск по сайту" maxlength="100" name="search"><br><br>
-    Начинаю осваивать html<br>
-    <a href="#yacor">Перейти ниже к якорю Ыть</a><br>
-    <a href="registration.html">Регистрация на проекте</a><br>
-    <a name="yacor">Ыть</a>
-  </body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../static/img/fav/fav.ico" type="image">
+    <link rel="apple-touch-icon" sizes="180x180" href="../static/img/fav/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../static/img/fav/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../static/img/fav/favicon-16x16.png">
+    <link rel="stylesheet" type="text/css" href="../static/css/style.css">
+    <!--<link rel="stylesheet" href="static/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Сайт заметок</title>
+</head>
+<body>
+  {% include "header.html" %} 
+  {% block content %}{% endblock content %}
+    <div class="note">
+      <div class="note_header">Заголовок заметки</div>
+      <br>
+      <div class="note_text">Текст заметки</div>
+      <div class="note_date-created">Дата создания: 01.01.2022</div>
+      <div class="note_date-estimated">Дата выполнения: 01.02.2022</div>
+    </div>
+    <!-- <main>
+        <div id="content"> -->
+            <!-- Содержание личных заметок пользователя -->
+        <!-- </div>
+        <a href="#" class="green-button">Создать заметку</a>
+    </main> -->
+  {% include "footer.html" %}
+</body>
 </html>

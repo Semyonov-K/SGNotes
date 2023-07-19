@@ -3,14 +3,14 @@ from datetime import datetime
 from sgnotes_app import db
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key = True)
-    nickname = db.Column(db.String(64), unique = True)
-    email = db.Column(db.String(120), unique = True)
-    notes = db.relationship('Note', backref = 'author', lazy = 'dynamic')
+# class User(db.Model):
+#     id = db.Column(db.Integer, primary_key = True)
+#     nickname = db.Column(db.String(64), unique = True)
+#     email = db.Column(db.String(120), unique = True)
+#     notes = db.relationship('Note', backref = 'author', lazy = 'dynamic')
 
-    def __repr__(self):
-        return '<Пользователь %r>' % (self.nickname)
+#     def __repr__(self):
+#         return '<Пользователь %r>' % (self.nickname)
 
 
 class Note(db.Model):
@@ -20,7 +20,7 @@ class Note(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     deadline = db.Column(db.DateTime, nullable=True)
     is_done = db.Column(db.Boolean, default=False)
-    user_nickname = db.Column(db.Integer, db.ForeignKey('user.nickname'))
+    # user_nickname = db.Column(db.Integer, db.ForeignKey('user.nickname'))
 
     def __repr__(self):
         return '<Заметка %r>' % (self.title)
