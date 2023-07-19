@@ -21,6 +21,10 @@ nav a {
     font-family: Arial;
 }
 
+nav div:hover {
+    color: red;
+}
+
 .logo {
     order: 1;
     margin-right: auto;
@@ -54,10 +58,18 @@ nav a {
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     padding: 12px 16px;
     z-index: 1;
+    color: #e0e3ea;
 }
 
 .notes-dropdown:hover .notes-dropdown-content {
     display: block;
+    color: #306A34;
+}
+
+.tasks:hover a,
+.notes-dropdown:hover .nd,
+.notes-dropdown-content .ndc:hover {
+  color: #306A34;
 }
 
 .header {
@@ -122,50 +134,6 @@ nav a {
     font-weight: bold;
 }
 
-/* nav ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-}
-
-nav ul li a {
-    color: #FFF;
-    text-decoration: none;
-    padding: 5px;
-}
-
-nav ul li.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.logo {
-    margin-right: auto;
-    display: flex;
-    justify-content: flex-start;
-}
-
-.profile {
-    margin-left: auto;
-    padding: 0;
-    float: right;
-} */
-
-
-/* .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #394D39;
-    padding: 5px;
-    z-index: 1;
-}
-
-.dropdown-content a {
-    display: block;
-    color: #FFF;
-    text-decoration: none;
-} */
 
 header img {
     margin-right: 10px;
