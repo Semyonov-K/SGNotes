@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sgnotes_app import app, db
 from models import Note
 
+#check work github
+
 
 @app.route('/')
 def my_index_view():
