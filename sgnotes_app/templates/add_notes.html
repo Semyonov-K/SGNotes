@@ -1,0 +1,33 @@
+{% extends 'index.html' %}
+{% block content %}
+<main>
+    <div class="add_note">
+        <h2>Добавить заметку</h2>
+        <form method="POST" action="{{ url_for('add_note') }}">
+          {{ form.hidden_tag() }}
+          <div class="form-group">
+            {{ form.title.label }}<br>
+            {{ form.title(class='form-control') }}<br>
+            {% for error in form.title.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.text.label }}<br>
+            {{ form.text(class='form-control') }}<br>
+            {% for error in form.text.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <div class="form-group">
+            {{ form.deadline.label }}<br>
+            {{ form.deadline(class='form-control') }}<br>
+            {% for error in form.deadline.errors %}
+              <span class="text-danger">{{ error }}</span>
+            {% endfor %}
+          </div>
+          <button type="submit" class="btn btn-primary">Добавить</button>
+        </form>
+    </div>
+</main>
+{% endblock %}

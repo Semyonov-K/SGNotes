@@ -1,13 +1,13 @@
 
 <header>
     <nav>
-        <div class="logo"><img src="../static/img/logo.png" alt="Логотип" href="#"></div>
+        <a class="logo" href="{{ url_for('author_notes') }}"><img src="../static/img/logo.png" alt="Логотип"></a>
         <div class="notes-dropdown">
             <a href="#" class="nd">Личные заметки</a>
             <div class="notes-dropdown-content">
                 <a href="#" class="ndc">Выполненные</a>
-                <a href="#" class="ndc">Невыполненные</a>
-                <a href="#" class="ndc">Создать заметку</a>
+                <a href="{{ url_for('author_notes') }}" class="ndc">Невыполненные</a>
+                <a href="{{ url_for('add_note') }}" class="ndc">Создать заметку</a>
                 <a href="#" class="ndc">Удалить заметку</a>
             </div>
         </div>

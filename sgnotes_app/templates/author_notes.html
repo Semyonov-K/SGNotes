@@ -1,36 +1,17 @@
-{% extends "base.html" %} 
+{% extends "index.html" %} 
 {% block content %}
 <main>
     {% if notes %}
       {% for note in notes %}
         <div class="note">
-            <div class="note_header">Заголовок заметки</div>
-            <div class="note_text">Текст заметки</div>
-            <div class="note_date-created">Дата создания: 01.01.2022</div>
-            <div class="note_date-estimated">Дата выполнения: 01.02.2022</div>
+          <div class="note_header">{{ note.title }}</div>
+          <br>
+          <div class="note_text">{{ note.text }}</div>
+          <div class="note_date-created">{{ note.timestamp }}</div>
+          <div class="note_date-estimated">{{ note.deadline }}</div>
         </div>
       {% endfor %}
+    {% else %} <h1>Нет заметочек :(</h1>
     {% endif %}
-    <!-- <section class="container my-5">
-      <div class="row">
-        <h1>{{ opinion.title }}</h1>
-        <div class="col-12 col-lg-7 my-5">
-          <p>{{ opinion.text }}</p>
-          <p>
-            Больше о фильме: 
-            {% if opinion.source %}
-              <a href="{{ opinion.source }}">{{ opinion.source }}</a>
-            {% else %} источник не указан {% endif %}
-          </p>
-          <p>
-            Ссылка для друзей:
-            <a href="{{ url_for('opinion_view', id=opinion.id, _external=True) }}">{{ url_for('opinion_view', id=opinion.id, _external=True) }}</a>
-          </p>
-        </div>
-        <div class="col-12 col-lg-5">
-          <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />
-        </div>
-      </div>
-    </section> -->
   </main>
   {% endblock %}

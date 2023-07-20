@@ -2,18 +2,34 @@ from flask import Flask, render_template, session, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from sgnotes_app import app, db
 from .models import Note
+from .forms import NoteForm
 
 
 @app.route('/')
-def my_index_view():
+def author_notes():
     notes = Note.query.all()
-    return render_template('index.html', notes=notes)
+    return render_template('author_notes.html', notes=notes)
     # if 'username' in session:
     #     username = session['username']
     #     user_notes = Note.query.filter_by(user_nickname=username).all()
     #     return render_template('index.html', username=username, notes=user_notes)
     # else:
     #     return redirect(url_for('register'))
+
+
+@app.route('/add-note', methods=['GET', 'POST'])
+def add_note():
+    form = NoteForm()
+    if form.validate_on_submit():
+        note = Note(
+            title=form.title.data, 
+            text=form.text.data, 
+            deadline=form.deadline.data
+        )
+        db.session.add(note)
+        db.session.commit()
+        return redirect(url_for('author_notes'))
+    return render_template('add_notes.html', form=form)
 
 
 @app.route('/register')
