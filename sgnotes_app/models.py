@@ -16,7 +16,7 @@ from sgnotes_app import db
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), nullable=False)
-    text = db.Column(db.Text, unique=True, nullable=False)
+    text = db.Column(db.Text, nullable=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     deadline = db.Column(db.DateTime, nullable=True)
     is_done = db.Column(db.Boolean, default=False)
