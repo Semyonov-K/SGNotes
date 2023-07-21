@@ -3,11 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from sgnotes_app import app, db
 from .models import Note
 from .forms import NoteForm
+from sqlalchemy import desc
 
 
 @app.route('/')
 def author_notes():
-    notes = Note.query.all()
+    notes = Note.query.order_by(desc(Note.timestamp)).all()
     return render_template('author_notes.html', notes=notes)
     # if 'username' in session:
     #     username = session['username']
