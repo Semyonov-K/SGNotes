@@ -21,11 +21,11 @@
           </div>
           <div class="form-group">
             <label for="deadline">Deadline:</label><br>
-            <input type="date" id="deadline" class="form-control" min="2022-01-01"><br>
+            <input type="date" id="deadline" class="form-control" min="2022-01-01" value="{{ form.deadline.data|default('') }}"><br>
             {% for error in form.deadline.errors %}
             <span class="text-danger">{{ error }}</span>
             {% endfor %}
-          </div>
+        </div>
           <!-- <div class="form-group", type="date">
             {{ form.deadline.label }}<br>
             {{ form.deadline(class='form-control') }}<br>

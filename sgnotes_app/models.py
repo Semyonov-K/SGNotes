@@ -24,3 +24,6 @@ class Note(db.Model):
 
     def __repr__(self):
         return '<Заметка %r>' % (self.title)
+    
+    def get_formatted_timestamp(self):
+        return self.timestamp.strftime('%d.%m.%Y')
