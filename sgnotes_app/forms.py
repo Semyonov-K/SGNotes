@@ -13,5 +13,5 @@ class NoteForm(FlaskForm):
         'Напишите заметку', 
         validators=[DataRequired(message='Обязательное поле')]
     )
-    deadline = DateField(validators=[Optional()])
+    deadline = DateField('Deadline')
     submit = SubmitField('Добавить')

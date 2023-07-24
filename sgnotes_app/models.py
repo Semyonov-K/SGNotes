@@ -27,3 +27,11 @@ class Note(db.Model):
     
     def get_formatted_timestamp(self):
         return self.timestamp.strftime('%d.%m.%Y')
+    
+    def set_deadline(self, deadline_str):
+        self.deadline = datetime.strptime(deadline_str, '%d.%m.%Y %H:%M')
+
+    def get_formatted_deadline(self):
+        if self.deadline:
+            return self.deadline.strftime('%d.%m.%Y %H:%M')
+        return None

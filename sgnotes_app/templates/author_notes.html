@@ -8,8 +8,8 @@
           <br>
           <div class="note_text">{{ note.text }}</div>
           <div class="note_date-created">Дата создания: {{ note.get_formatted_timestamp() }}</div>
-          {% if note.deadline is not none %}
-          <div class="note_date-estimated">Выполнить к: {{ note.deadline }}</div>
+          {% if note.deadline %}
+          <div class="note_date-estimated">Выполнить к: {{ note.get_formatted_deadline() }}</div>
           {% else %} <div class="note_date-estimated">---</div> {% endif %}
         </div>
       {% endfor %}
