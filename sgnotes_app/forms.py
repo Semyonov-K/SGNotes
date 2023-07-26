@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import DateField, StringField, SubmitField, TextAreaField
+from wtforms import DateTimeField, StringField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, Length, Optional
 
 
@@ -13,5 +13,5 @@ class NoteForm(FlaskForm):
         'Напишите заметку', 
         validators=[DataRequired(message='Обязательное поле')]
     )
-    deadline = DateField('Deadline')
+    deadline = StringField(validators=[Optional()])
     submit = SubmitField('Добавить')

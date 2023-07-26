@@ -22,14 +22,13 @@ def author_notes():
 def add_note():
     form = NoteForm()
     if form.validate_on_submit():
-        deadline = form.deadline.data
         note = Note(
             title=form.title.data, 
             text=form.text.data, 
-            deadline=deadline
         )
-        if form.deadline.data is not None:
-            note.set_deadline(deadline)
+        print(form.deadline.data)
+        if form.deadline.data:
+            note.set_deadline(form.deadline.data)
         db.session.add(note)
         db.session.commit()
         return redirect(url_for('author_notes'))
