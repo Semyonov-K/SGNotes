@@ -231,4 +231,55 @@ label {
     margin-top: 5px;
 }
 
-
+.note {
+    position: relative;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f8f8f8;
+}
+  
+.note_header {
+    font-size: 18px;
+    font-weight: bold;
+}
+  
+.note_text {
+    margin-top: 5px;
+}
+  
+.note_date-created,
+.note_date-estimated {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #888;
+}
+  
+.note_menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+  
+.note_menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+  
+.note_menu li {
+    margin-bottom: 5px;
+}
+  
+.note_menu a {
+    color: #fff;
+    text-decoration: none;
+}
+  
+.note:hover .note_menu {
+    opacity: 1;
+}

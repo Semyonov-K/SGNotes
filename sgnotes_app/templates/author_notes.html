@@ -11,6 +11,13 @@
           {% if note.deadline %}
           <div class="note_date-estimated">Выполнить к: {{ note.get_formatted_deadline() }}</div>
           {% else %} <div class="note_date-estimated">---</div> {% endif %}
+          <div class="note_menu">
+            <ul>
+              <li><a href="#">Отметить как выполненное</a></li>
+              <li><a href="#">Удалить</a></li>
+              <li><a href="#">Редактировать</a></li>
+            </ul>
+          </div>
         </div>
       {% endfor %}
     {% else %} <h1>Нет заметочек :(</h1>

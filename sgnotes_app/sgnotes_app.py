@@ -35,6 +35,9 @@ def add_note():
     return render_template('add_notes.html', form=form)
 
 
+
+
+
 @app.route('/register')
 def register():
     return render_template('register.html')
