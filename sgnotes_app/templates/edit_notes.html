@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+{% block content %}
+<main>
+    <div class="add_note">
+        <body>
+            <h1>Редактировать заметку</h1>
+            <form method="POST">
+                <div>
+                    <label for="title">Заголовок:</label>
+                    <input type="text" id="title" name="title" value="{{ note.title }}" required>
+                </div>
+                <div>
+                    <label for="text">Содержание:</label>
+                    <textarea id="text" name="text" rows="5" required>{{ note.text }}</textarea>
+                </div>
+                <div>
+                    <label for="deadline">Deadline:</label>
+                    <input type="datetime-local" id="deadline" name="deadline" class="form-control" value="{{ note.deadline }}">
+                </div>
+                <button type="submit">Сохранить</button>
+            </form>
+        </body>
+    </div>
+</main>
+{% endblock %}

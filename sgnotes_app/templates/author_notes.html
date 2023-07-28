@@ -13,9 +13,9 @@
           {% else %} <div class="note_date-estimated">---</div> {% endif %}
           <div class="note_menu">
             <ul>
-              <li><a href="#">Отметить как выполненное</a></li>
-              <li><a href="#">Удалить</a></li>
-              <li><a href="#">Редактировать</a></li>
+              <li><a href="#"">Отметить как выполненное</a></li>
+              <li><a href="/delete/{{ note.id }}">Удалить</a></li>
+              <li><a href="/edit/{{ note.id }}">Редактировать</a></li>
             </ul>
           </div>
         </div>

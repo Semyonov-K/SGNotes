@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for
+from flask import Flask, render_template, session, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from sgnotes_app import app, db
 from .models import Note
@@ -26,7 +26,6 @@ def add_note():
             title=form.title.data, 
             text=form.text.data, 
         )
-        print(form.deadline.data)
         if form.deadline.data:
             note.set_deadline(form.deadline.data)
         db.session.add(note)
@@ -35,7 +34,27 @@ def add_note():
     return render_template('add_notes.html', form=form)
 
 
+@app.route('/delete/<int:note_id>', methods=['GET', 'POST'])
+def delete_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    db.session.delete(note)
+    db.session.commit()
+    return redirect('/')
 
+
+@app.route('/edit/<int:note_id>', methods=['GET', 'POST'])
+def edit_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    if request.method == 'POST':
+        note.title = request.form['title']
+        note.text = request.form['text']
+        deadline = request.form['deadline']
+        if deadline:
+            datedeadline = note.set_deadline(deadline)
+            note.deadline = datedeadline 
+        db.session.commit()
+        return redirect(url_for('author_notes'))
+    return render_template('edit_notes.html', note=note)
 
 
 @app.route('/register')
