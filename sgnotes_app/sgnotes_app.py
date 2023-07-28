@@ -4,6 +4,7 @@ from sgnotes_app import app, db
 from .models import Note
 from .forms import NoteForm
 from sqlalchemy import desc
+from datetime import datetime
 
 
 @app.route('/')
@@ -48,10 +49,10 @@ def edit_note(note_id):
     if request.method == 'POST':
         note.title = request.form['title']
         note.text = request.form['text']
-        deadline = request.form['deadline']
-        if deadline:
-            datedeadline = note.set_deadline(deadline)
-            note.deadline = datedeadline 
+        if request.form['deadline']:
+            note.set_deadline(request.form['deadline'])
+        else:
+            note.deadline = None
         db.session.commit()
         return redirect(url_for('author_notes'))
     return render_template('edit_notes.html', note=note)
