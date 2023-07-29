@@ -16,10 +16,12 @@
         <div class="profile"><img src="../static/img/bell.png" alt="Уведомления"></div>
         <div class="profile"><img src="../static/img/user.png" alt="Авторизация"></div>
         <div class="search-box">
-            <input type="text" name="" class="search-txt" placeholder="Поиск по заметкам"/>
-            <a class="search-btn" href="#">
-            <i class="fa fa-search" aria-hidden="true"></i>
-            </a>
+            <form action="/" method="POST">
+                <input type="text" name="search_term" class="search-txt" placeholder="Поиск по заметкам" />
+                <button type="submit" class="search-btn">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </button>
+            </form>
         </div>
     </nav>
 </header>

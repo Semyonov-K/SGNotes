@@ -7,9 +7,13 @@ from sqlalchemy import desc
 from datetime import datetime
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def author_notes():
-    notes = Note.query.order_by(desc(Note.timestamp)).all()
+    if request.method == 'POST':
+        search_term = request.form['search_term']
+        notes = Note.query.filter(Note.title.ilike(f'%{search_term}%')).order_by(desc(Note.timestamp)).all()
+    else:
+        notes = Note.query.order_by(desc(Note.timestamp)).all()
     return render_template('author_notes.html', notes=notes)
     # if 'username' in session:
     #     username = session['username']

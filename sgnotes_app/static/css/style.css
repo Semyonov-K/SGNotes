@@ -89,13 +89,13 @@ nav div:hover {
     padding: 10px;
 }
 
-.search-box:hover > .search-txt {
+.search-box:hover   .search-txt {
     width: 240px;
     padding-left: 6px;
     padding-right: 0;
 }
 
-.search-box:hover > .search-btn {
+.search-box:hover   .search-btn {
     background: white;
     color: black;
 }
