@@ -62,6 +62,13 @@ def edit_note(note_id):
     return render_template('edit_notes.html', note=note)
 
 
+@app.route('/done/<int:note_id>', methods=['GET', 'POST'])
+def done_note(note_id):
+    note = Note.query.get_or_404(note_id)
+    note.is_done = not note.is_done
+    db.session.commit()
+    return redirect('/' + f'#{note_id}')
+
 @app.route('/register')
 def register():
     return render_template('register.html')
