@@ -67,7 +67,18 @@ def done_note(note_id):
     note = Note.query.get_or_404(note_id)
     note.is_done = not note.is_done
     db.session.commit()
-    return redirect('/' + f'#{note_id}')
+    return redirect(request.referrer)
+
+
+@app.route('/done/', methods=['GET'])
+@app.route('/undone/', methods=['GET'])
+def complete_task():
+    if request.path == '/done/':
+        notes = Note.query.filter(Note.is_done==True).order_by(desc(Note.timestamp)).all()
+    elif request.path == '/undone/':
+        notes = Note.query.filter(Note.is_done==False).order_by(desc(Note.timestamp)).all()
+    return render_template('author_notes.html', notes=notes)
+
 
 @app.route('/register')
 def register():

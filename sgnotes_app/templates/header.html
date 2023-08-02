@@ -5,10 +5,9 @@
         <div class="notes-dropdown">
             <a href="#" class="nd">Личные заметки</a>
             <div class="notes-dropdown-content">
-                <a href="#" class="ndc">Выполненные</a>
-                <a href="{{ url_for('author_notes') }}" class="ndc">Невыполненные</a>
+                <a href="/done/" class="ndc">Выполненные</a>
+                <a href="/undone/" class="ndc">Невыполненные</a>
                 <a href="{{ url_for('add_note') }}" class="ndc">Создать заметку</a>
-                <a href="#" class="ndc">Удалить заметку</a>
             </div>
         </div>
         <div class="tasks"><a href="#">Доска задач</a></div>
