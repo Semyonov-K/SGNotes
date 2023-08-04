@@ -2,6 +2,9 @@
 <header>
     <nav>
         <a class="logo" href="{{ url_for('author_notes') }}"><img src="../static/img/logo.png" alt="Логотип"></a>
+        <div class="main-page">
+            <a href="#" class="nd">Главная страница</a>
+        </div>
         <div class="notes-dropdown">
             <a href="#" class="nd">Личные заметки</a>
             <div class="notes-dropdown-content">
@@ -10,9 +13,22 @@
                 <a href="{{ url_for('add_note') }}" class="ndc">Создать заметку</a>
             </div>
         </div>
-        <div class="tasks"><a href="#">Доска задач</a></div>
+        <div class="tasks"><a href="#">Доска задач (в разработке)</a></div>
 
-        <div class="profile"><img src="../static/img/bell.png" alt="Уведомления"></div>
+        <div class="profile"><img src="../static/img/bell.png" alt="Уведомления">
+            <div class="notice">
+            {% if notes %}
+                {% for note in notes %}
+                    {% set notices = note.get_notice() %}
+                    {% if notices %}
+                        <div>Если вы выполнили заметку {{ notices }}, то отметьте ее выполненной </div>
+                    {% endif %}
+                {% else %}
+                    <p>Уведомлений нет</p>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>
         <div class="profile"><img src="../static/img/user.png" alt="Авторизация"></div>
         <div class="search-box">
             <form action="/" method="POST">

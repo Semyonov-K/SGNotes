@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sgnotes_app import db
 
@@ -36,3 +36,10 @@ class Note(db.Model):
         if self.deadline:
             return self.deadline.strftime('%d.%m.%Y %H:%M')
         return None
+    
+    def get_notice(self):
+        if self.deadline and self.is_done is False:
+            current_time = datetime.utcnow()
+            time_difference = self.deadline - current_time
+            if time_difference.total_seconds() < 3600:
+                return self.title
