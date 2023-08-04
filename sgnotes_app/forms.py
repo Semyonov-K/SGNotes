@@ -4,6 +4,7 @@ from wtforms.validators import DataRequired, Length, Optional
 
 
 class NoteForm(FlaskForm):
+    """Форма заметки."""
     title = StringField(
         'Заголовок заметки',
         validators=[DataRequired(message='Обязательное поле'),

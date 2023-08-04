@@ -14,6 +14,7 @@ from sgnotes_app import db
 
 
 class Note(db.Model):
+    """Модель заметок."""
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(128), nullable=False)
     text = db.Column(db.Text, nullable=False)

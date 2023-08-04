@@ -9,6 +9,9 @@ from datetime import datetime
 
 @app.route('/', methods=['GET', 'POST'])
 def author_notes():
+    """Главная страница. Содержит в себе поиск по методу POST.
+    Сортирует по дате добавления.
+    """
     if request.method == 'POST':
         search_term = request.form['search_term']
         notes = Note.query.filter(Note.title.ilike(f'%{search_term}%')).order_by(desc(Note.timestamp)).all()
@@ -25,6 +28,7 @@ def author_notes():
 
 @app.route('/add-note', methods=['GET', 'POST'])
 def add_note():
+    """Добавление заметки."""
     form = NoteForm()
     if form.validate_on_submit():
         note = Note(
@@ -41,6 +45,7 @@ def add_note():
 
 @app.route('/delete/<int:note_id>', methods=['GET', 'POST'])
 def delete_note(note_id):
+    """Удаление заметки."""
     note = Note.query.get_or_404(note_id)
     db.session.delete(note)
     db.session.commit()
@@ -49,6 +54,7 @@ def delete_note(note_id):
 
 @app.route('/edit/<int:note_id>', methods=['GET', 'POST'])
 def edit_note(note_id):
+    """Редактирование заметки."""
     note = Note.query.get_or_404(note_id)
     if request.method == 'POST':
         note.title = request.form['title']
@@ -64,6 +70,7 @@ def edit_note(note_id):
 
 @app.route('/done/<int:note_id>', methods=['GET', 'POST'])
 def done_note(note_id):
+    """Функция, которая отмечает задание выполненным."""
     note = Note.query.get_or_404(note_id)
     note.is_done = not note.is_done
     db.session.commit()
@@ -73,6 +80,7 @@ def done_note(note_id):
 @app.route('/done/', methods=['GET'])
 @app.route('/undone/', methods=['GET'])
 def complete_task():
+    """Страницы выполненных/невыполненных заданий."""
     if request.path == '/done/':
         notes = Note.query.filter(Note.is_done==True).order_by(desc(Note.timestamp)).all()
     elif request.path == '/undone/':
