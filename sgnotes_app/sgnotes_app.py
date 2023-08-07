@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, redirect, url_for, request
 from flask_sqlalchemy import SQLAlchemy
 from sgnotes_app import app, db
-from .models import Note
+from .models import Note, User
 from .forms import NoteForm
 from sqlalchemy import desc
 from datetime import datetime
@@ -86,6 +86,19 @@ def complete_task():
     elif request.path == '/undone/':
         notes = Note.query.filter(Note.is_done==False).order_by(desc(Note.timestamp)).all()
     return render_template('author_notes.html', notes=notes)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and user.password == password:
+            session['user_id'] = user.id
+            return redirect(url_for('author_notes'))
+        return 'Неверные данные входа'
+    return render_template('login.html')
 
 
 @app.route('/register')
