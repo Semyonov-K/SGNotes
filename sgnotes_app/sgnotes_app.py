@@ -12,6 +12,11 @@ def author_notes():
     """Главная страница. Содержит в себе поиск по методу POST.
     Сортирует по дате добавления.
     """
+    user_id = session.get('user_id')
+    if user_id:
+        user = User.query.get(user_id)
+        notes = user.notes
+        return render_template('notes.html', notes=notes)
     if request.method == 'POST':
         search_term = request.form['search_term']
         notes = Note.query.filter(Note.title.ilike(f'%{search_term}%')).order_by(desc(Note.timestamp)).all()
@@ -104,6 +109,22 @@ def login():
 @app.route('/register')
 def register():
     return render_template('register.html')
+
+
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    if request.method == 'POST':
+        user_id = session.get('user_id')
+        user = User.query.get(user_id)
+        current_password = request.form['current_password']
+        new_password = request.form['new_password']
+        if user and user.password == current_password:
+            user.password = new_password
+            db.session.commit()
+            return 'Пароль успешно изменен'
+        else:
+            return 'Неверный текущий пароль'
+    return render_template('change_password.html')
 
 
 if __name__ == '__main__':
