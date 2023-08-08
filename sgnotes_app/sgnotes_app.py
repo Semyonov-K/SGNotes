@@ -106,8 +106,16 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        role = 'user'
+        user = User(username=username, password=password, role=role)
+        db.session.add(user)
+        db.session.commit()
+        return redirect(url_for('login'))
     return render_template('register.html')
 
 
