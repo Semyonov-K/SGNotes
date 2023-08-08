@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, request
+from flask import Flask, render_template, session, redirect, url_for, request, flash
 from flask_sqlalchemy import SQLAlchemy
 from sgnotes_app import app, db
 from .models import Note, User
@@ -7,28 +7,42 @@ from sqlalchemy import desc
 from datetime import datetime
 
 
+@app.route('/main-page', methods=['GET', 'POST'])
+def main_page():
+    return render_template('main.html')
+
+
 @app.route('/', methods=['GET', 'POST'])
 def author_notes():
-    """Главная страница. Содержит в себе поиск по методу POST.
+    """Главная страница пользователя. Содержит в себе поиск по методу POST.
     Сортирует по дате добавления.
     """
     user_id = session.get('user_id')
     if user_id:
         user = User.query.get(user_id)
         notes = user.notes
-        return render_template('notes.html', notes=notes)
-    if request.method == 'POST':
-        search_term = request.form['search_term']
-        notes = Note.query.filter(Note.title.ilike(f'%{search_term}%')).order_by(desc(Note.timestamp)).all()
+        return render_template('author_notes.html', notes=notes)
     else:
-        notes = Note.query.order_by(desc(Note.timestamp)).all()
-    return render_template('author_notes.html', notes=notes)
+        return redirect(url_for('main_page'))
     # if 'username' in session:
     #     username = session['username']
     #     user_notes = Note.query.filter_by(user_nickname=username).all()
     #     return render_template('index.html', username=username, notes=user_notes)
     # else:
     #     return redirect(url_for('register'))
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method == 'POST':
+        user_id = session.get('user_id')
+        if user_id:
+            search_term = request.form['search_term']
+            notes = Note.query.filter(Note.title.ilike(f'%{search_term}%')).order_by(desc(Note.timestamp)).all()
+            return render_template('author_notes.html', notes=notes)
+        else:
+            flash('Поиск по заметкам доступен только для авторизованных пользователей!')
+            return redirect(url_for('main_page'))
 
 
 @app.route('/add-note', methods=['GET', 'POST'])
@@ -38,7 +52,8 @@ def add_note():
     if form.validate_on_submit():
         note = Note(
             title=form.title.data, 
-            text=form.text.data, 
+            text=form.text.data,
+            user=session['user_id']
         )
         if form.deadline.data:
             note.set_deadline(form.deadline.data)

@@ -3,10 +3,10 @@
     <nav>
         <a class="logo" href="{{ url_for('author_notes') }}"><img src="../static/img/logo.png" alt="Логотип"></a>
         <div class="main-page">
-            <a href="#" class="nd">Главная страница</a>
+            <a href="{{ url_for('main_page') }}" class="nd">Главная страница</a>
         </div>
         <div class="notes-dropdown">
-            <a href="#" class="nd">Личные заметки</a>
+            <a href="{{ url_for('author_notes') }}" class="nd">Личные заметки</a>
             <div class="notes-dropdown-content">
                 <a href="/done/" class="ndc">Выполненные</a>
                 <a href="/undone/" class="ndc">Невыполненные</a>
@@ -31,7 +31,7 @@
         </div>
         <div class="profile"><img src="../static/img/user.png" alt="Авторизация"></div>
         <div class="search-box">
-            <form action="/" method="POST">
+            <form action="/search" method="POST">
                 <input type="text" name="search_term" class="search-txt" placeholder="Поиск по заметкам" />
                 <button type="submit" class="search-btn">
                     <i class="fa fa-search" aria-hidden="true"></i>
