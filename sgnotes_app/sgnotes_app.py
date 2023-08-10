@@ -18,12 +18,12 @@ def author_notes():
     Сортирует по дате добавления.
     """
     user_id = session.get('user_id')
-    if user_id:
-        user = User.query.get(user_id)
-        notes = user.notes
-        return render_template('author_notes.html', notes=notes)
-    else:
+    if user_id is None:
+        flash('Функция доступна только авторизованным пользователям')
         return redirect(url_for('main_page'))
+    user = User.query.get(user_id)
+    notes = user.notes
+    return render_template('author_notes.html', notes=notes)
     # if 'username' in session:
     #     username = session['username']
     #     user_notes = Note.query.filter_by(user_nickname=username).all()
@@ -48,12 +48,16 @@ def search():
 @app.route('/add-note', methods=['GET', 'POST'])
 def add_note():
     """Добавление заметки."""
+    user_id = session.get('user_id')
+    if user_id is None:
+        flash('Функция доступна только авторизованным пользователям')
+        return redirect(url_for('main_page'))
     form = NoteForm()
     if form.validate_on_submit():
         note = Note(
             title=form.title.data, 
             text=form.text.data,
-            user=session['user_id']
+            user=user_id
         )
         if form.deadline.data:
             note.set_deadline(form.deadline.data)
