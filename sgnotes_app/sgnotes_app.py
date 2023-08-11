@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, redirect, url_for, request, flash
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from flask_sqlalchemy import SQLAlchemy
 from sgnotes_app import app, db, login_manager
 from .models import Note, User
@@ -19,13 +19,9 @@ def author_notes():
     """Главная страница пользователя. Содержит в себе поиск по методу POST.
     Сортирует по дате добавления.
     """
-    user_id = session.get('user_id')
-    user = load_user(user_id)
-    if user.notes is not None:
-        notes = user.notes
-    else:
-        flash('Заметок пока что - нет :(')
-        return render_template('author_notes.html')
+    user_id = current_user.id
+    print(user_id)
+    notes = Note.query.filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
     return render_template('author_notes.html', notes=notes)
 
 
@@ -33,11 +29,10 @@ def author_notes():
 @login_required
 def search():
     if request.method == 'POST':
-        user_id = session.get('user_id')
-        user = load_user(user_id)
+        user_id = current_user.id
         if user_id:
             search_term = request.form['search_term']
-            notes = Note.query.filter(Note.title.ilike(f'%{search_term}%')).filter(Note.user_id==user).order_by(desc(Note.timestamp)).all()
+            notes = Note.query.filter(Note.title.ilike(f'%{search_term}%')).filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
             return render_template('author_notes.html', notes=notes)
         else:
             flash('Поиск по заметкам доступен только для авторизованных пользователей!')
@@ -48,14 +43,13 @@ def search():
 @login_required
 def add_note():
     """Добавление заметки."""
-    user_id = session.get('user_id')
-    user = load_user(user_id)
+    user_id = current_user.id
     form = NoteForm()
     if form.validate_on_submit():
         note = Note(
             title=form.title.data, 
             text=form.text.data,
-            user_id=user
+            user_id=user_id
         )
         if form.deadline.data:
             note.set_deadline(form.deadline.data)
@@ -69,10 +63,9 @@ def add_note():
 @login_required
 def delete_note(note_id):
     """Удаление заметки."""
-    user_id = session.get('user_id')
-    user = load_user(user_id)
+    user_id = current_user.id
     note = Note.query.get_or_404(note_id)
-    if note.user_id == user:
+    if note.user_id == user_id:
         db.session.delete(note)
         db.session.commit()
         return redirect('/')
@@ -84,10 +77,9 @@ def delete_note(note_id):
 @login_required
 def edit_note(note_id):
     """Редактирование заметки."""
-    user_id = session.get('user_id')
-    user = load_user(user_id)
+    user_id = current_user.id
     note = Note.query.get_or_404(note_id)
-    if note.user_id == user:
+    if note.user_id == user_id:
         if request.method == 'POST':
             note.title = request.form['title']
             note.text = request.form['text']
@@ -106,10 +98,9 @@ def edit_note(note_id):
 @login_required
 def done_note(note_id):
     """Функция, которая отмечает задание выполненным."""
-    user_id = session.get('user_id')
-    user = load_user(user_id)
+    user_id = current_user.id
     note = Note.query.get_or_404(note_id)
-    if note.user_id == user:
+    if note.user_id == user_id:
         note.is_done = not note.is_done
         db.session.commit()
         return redirect(request.referrer)
@@ -122,12 +113,11 @@ def done_note(note_id):
 @login_required
 def complete_task():
     """Страницы выполненных/невыполненных заданий."""
-    user_id = session.get('user_id')
-    user = load_user(user_id)
+    user_id = current_user.id
     if request.path == '/done/':
-        notes = Note.query.filter(Note.is_done==True).filter(Note.user_id==user).order_by(desc(Note.timestamp)).all()
+        notes = Note.query.filter(Note.is_done==True).filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
     elif request.path == '/undone/':
-        notes = Note.query.filter(Note.is_done==False).filter(Note.user_id==user).order_by(desc(Note.timestamp)).all()
+        notes = Note.query.filter(Note.is_done==False).filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
     return render_template('author_notes.html', notes=notes)
 
 
@@ -172,7 +162,7 @@ def logout():
 @app.route('/change_password', methods=['GET', 'POST'])
 def change_password():
     if request.method == 'POST':
-        user_id = session.get('user_id')
+        user_id = current_user.id
         user = User.query.get(user_id)
         current_password = request.form['current_password']
         new_password = request.form['new_password']
