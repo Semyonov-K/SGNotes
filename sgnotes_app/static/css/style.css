@@ -48,10 +48,12 @@ nav div:hover {
     margin-right: 52%;
 }
 
+.notification {
+    order: 4;
+}
+
 .profile {
-    display: inline;
     order: 5;
-    float: inline-end;
 }
 
 
@@ -79,13 +81,35 @@ nav div:hover {
     right: 0;
 }
 
+.profile-dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #262b30;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 12px 16px;
+    z-index: 1;
+    color: #e0e3ea;
+    left: auto;
+    right: 0;
+}
+
+.profile-dropdown-content a {
+    display: block;
+}
+
 .notes-dropdown:hover .notes-dropdown-content {
     display: block;
     color: #306A34;
 }
 
 
-.profile:hover .notice {
+.notification:hover .notice {
+    display: block;
+    color: #306A34;
+}
+
+.profile:hover .profile-dropdown-content {
     display: block;
     color: #306A34;
 }
@@ -93,7 +117,8 @@ nav div:hover {
 .main-page:hover a,
 .tasks:hover a,
 .notes-dropdown:hover .nd,
-.notes-dropdown-content .ndc:hover {
+.notes-dropdown-content .ndc:hover,
+.profile-dropdown-content .prfcnt:hover {
   color: #306A34;
 }
 

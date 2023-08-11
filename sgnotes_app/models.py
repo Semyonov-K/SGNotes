@@ -1,9 +1,10 @@
 from datetime import datetime
+from flask_login import UserMixin
 
 from sgnotes_app import db
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True)
     password = db.Column(db.String(50))
@@ -11,7 +12,7 @@ class User(db.Model):
     notes = db.relationship('Note', backref='user', lazy=True)
 
     def __repr__(self):
-        return '<Пользователь %r>' % (self.nickname)
+        return '<Пользователь %r>' % (self.username)
 
 
 class Note(db.Model):
@@ -22,7 +23,7 @@ class Note(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     deadline = db.Column(db.DateTime, nullable=True)
     is_done = db.Column(db.Boolean, default=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Заметка %r>' % (self.title)

@@ -15,7 +15,7 @@
         </div>
         <div class="tasks"><a href="#">Доска задач (в разработке)</a></div>
 
-        <div class="profile"><img src="../static/img/bell.png" alt="Уведомления">
+        <div class="notification"><img src="../static/img/bell.png" alt="Уведомления">
             <div class="notice">
             {% if notes %}
                 {% for note in notes %}
@@ -29,7 +29,15 @@
             {% endif %}
             </div>
         </div>
-        <div class="profile"><img src="../static/img/user.png" alt="Авторизация"></div>
+        <div class="profile"><img src="../static/img/user.png" alt="Авторизация">
+            <div class="profile-dropdown-content">
+                <a href="{{ url_for('login') }}" class="prfcnt">Войти в профиль</a>
+                <a href="/done/" class="prfcnt">Про1филь</a>
+                <a href="/undone/" class="prfcnt">Смена пароля</a>
+                <a href="{{ url_for('logout') }}" class="prfcnt">Выход из профиля</a>
+                <a href="{{ url_for('register') }}" class="prfcnt">Регистрация</a>
+            </div>
+        </div>
         <div class="search-box">
             <form action="/search" method="POST">
                 <input type="text" name="search_term" class="search-txt" placeholder="Поиск по заметкам" />
