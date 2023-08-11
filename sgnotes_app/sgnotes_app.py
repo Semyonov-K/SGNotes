@@ -160,6 +160,7 @@ def logout():
 
 
 @app.route('/change_password', methods=['GET', 'POST'])
+@login_required
 def change_password():
     if request.method == 'POST':
         user_id = current_user.id
