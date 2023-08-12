@@ -1,4 +1,3 @@
-
 <header>
     <nav>
         <a class="logo" href="{{ url_for('author_notes') }}"><img src="../static/img/logo.png" alt="Логотип"></a>
@@ -23,8 +22,6 @@
                     {% if notices %}
                         <div>Если вы выполнили заметку {{ notices }}, то отметьте ее выполненной </div>
                     {% endif %}
-                {% else %}
-                    <p>Уведомлений нет</p>
                 {% endfor %}
             {% endif %}
             </div>

@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask_login import UserMixin
+from flask_login import UserMixin, current_user
 
 from sgnotes_app import db
 
@@ -41,7 +41,10 @@ class Note(db.Model):
     
     def get_notice(self):
         if self.deadline and self.is_done is False:
-            current_time = datetime.utcnow()
-            time_difference = self.deadline - current_time
-            if time_difference.total_seconds() < 3600:
-                return self.title
+            if self.user_id == int(current_user.get_id()):
+                current_time = datetime.now()
+                print(current_time)
+                time_difference = self.deadline - current_time
+                print(time_difference)
+                if time_difference.total_seconds() < 3600:
+                    return self.title

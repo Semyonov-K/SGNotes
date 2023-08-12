@@ -20,7 +20,6 @@ def author_notes():
     Сортирует по дате добавления.
     """
     user_id = current_user.id
-    print(user_id)
     notes = Note.query.filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
     return render_template('author_notes.html', notes=notes)
 

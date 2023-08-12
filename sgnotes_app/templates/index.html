@@ -8,7 +8,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="../static/img/fav/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="../static/img/fav/favicon-16x16.png">
     <link rel="stylesheet" type="text/css" href="../static/css/style.css">
-    <!--<link rel="stylesheet" href="static/css/bootstrap.min.css">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Сайт заметок</title>
 </head>
@@ -22,19 +21,8 @@
    {% endif %}
   {% endwith %}
   {% block content %}{% endblock content %}
-    <!-- <div class="note">
-      <div class="note_header">Заголовок заметки</div>
-      <br>
-      <div class="note_text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero aliquam error doloribus recusandae possimus voluptatem ad laboriosam fuga odio unde quae sit numquam, placeat, beatae natus cum ullam quam. Culpa?</div>
-      <div class="note_date-created">Дата создания: 01.01.2022</div>
-      <div class="note_date-estimated">Дата выполнения: 01.02.2022</div>
-    </div> -->
-    <!-- <main>
-        <div id="content"> -->
-            <!-- Содержание личных заметок пользователя -->
-        <!-- </div>
-        <a href="#" class="green-button">Создать заметку</a>
-    </main> -->
-  {% include "footer.html" %}
+  <footer class="footer">
+    {% include "footer.html" %}
+  </footer>
 </body>
 </html>
