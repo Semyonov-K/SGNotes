@@ -10,7 +10,9 @@ from datetime import datetime
 
 @app.route('/main-page', methods=['GET', 'POST'])
 def main_page():
-    return render_template('main.html')
+    user_id = current_user.id
+    username = User.query.get(user_id)
+    return render_template('main.html', username=username.username)
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -21,7 +23,8 @@ def author_notes():
     """
     user_id = current_user.id
     notes = Note.query.filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
-    return render_template('author_notes.html', notes=notes)
+    username = User.query.get_or_404(user_id)
+    return render_template('author_notes.html', notes=notes, username=username.username)
 
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -29,10 +32,11 @@ def author_notes():
 def search():
     if request.method == 'POST':
         user_id = current_user.id
+        username = User.query.get_or_404(user_id)
         if user_id:
             search_term = request.form['search_term']
             notes = Note.query.filter(Note.title.ilike(f'%{search_term}%')).filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
-            return render_template('author_notes.html', notes=notes)
+            return render_template('author_notes.html', notes=notes, username=username.username)
         else:
             flash('Поиск по заметкам доступен только для авторизованных пользователей!')
             return redirect(url_for('main_page'))
@@ -43,6 +47,7 @@ def search():
 def add_note():
     """Добавление заметки."""
     user_id = current_user.id
+    username = User.query.get_or_404(user_id)
     form = NoteForm()
     if form.validate_on_submit():
         note = Note(
@@ -55,7 +60,7 @@ def add_note():
         db.session.add(note)
         db.session.commit()
         return redirect(url_for('author_notes'))
-    return render_template('add_notes.html', form=form)
+    return render_template('add_notes.html', form=form, username=username.username)
 
 
 @app.route('/delete/<int:note_id>', methods=['GET', 'POST'])
@@ -78,6 +83,7 @@ def edit_note(note_id):
     """Редактирование заметки."""
     user_id = current_user.id
     note = Note.query.get_or_404(note_id)
+    username = User.query.get_or_404(user_id)
     if note.user_id == user_id:
         if request.method == 'POST':
             note.title = request.form['title']
@@ -88,7 +94,7 @@ def edit_note(note_id):
                 note.deadline = None
             db.session.commit()
             return redirect(url_for('author_notes'))
-        return render_template('edit_notes.html', note=note)
+        return render_template('edit_notes.html', note=note, username=username.username)
     else:
         return 'BANNED UPD!!!!!!'
 
@@ -113,11 +119,12 @@ def done_note(note_id):
 def complete_task():
     """Страницы выполненных/невыполненных заданий."""
     user_id = current_user.id
+    username = User.query.get_or_404(user_id)
     if request.path == '/done/':
         notes = Note.query.filter(Note.is_done==True).filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
     elif request.path == '/undone/':
         notes = Note.query.filter(Note.is_done==False).filter(Note.user_id==user_id).order_by(desc(Note.timestamp)).all()
-    return render_template('author_notes.html', notes=notes)
+    return render_template('author_notes.html', notes=notes, username=username.username)
 
 
 @login_manager.user_loader
