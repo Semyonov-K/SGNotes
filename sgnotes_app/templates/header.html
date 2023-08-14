@@ -30,6 +30,7 @@
             <div class="profile-dropdown-content">
                 {% if username %}
                 <a class="privet">Здравствуйте, {{ username }}</a>
+                <br>
                 <a href="{{ url_for('change_password') }}" class="prfcnt">Смена пароля</a>
                 <a href="{{ url_for('logout') }}" class="prfcnt">Выход из профиля</a>
                 {% endif %}
