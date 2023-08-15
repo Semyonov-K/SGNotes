@@ -48,3 +48,18 @@ class Note(db.Model):
                 print(time_difference)
                 if time_difference.total_seconds() < 3600:
                     return self.title
+
+    def to_dict(self):
+        return dict(
+            id = self.id,
+            title = self.title,
+            text = self.text,
+            timestamp = self.timestamp,
+            deadline = self.deadline,
+            is_done = self.is_done
+        )
+    
+    def from_dict(self, data):
+        for field in ['title', 'text', 'source', 'added_by']:
+            if field in data:
+                setattr(self, field, data[field]) 
