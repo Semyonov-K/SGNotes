@@ -77,9 +77,10 @@ def register():
     data = request.get_json()
     users = User.query.filter(User.username==data['username']).first()
     if users:
-        return jsonify(
-            {'message': 'Пользователь с таким никнеймом уже существует!'}
-        ), HTTPStatus.BAD_REQUEST
+        raise InvalidAPIUsage(
+            'Такой пользователь уже существует!',
+            HTTPStatus.BAD_REQUEST
+        )
     user = User()
     user.from_dict(data)
     db.session.add(user)
@@ -94,7 +95,10 @@ def login():
     if user and user.password == data['password']:
         login_user(user)
         return jsonify({'message': 'Вы успешно залогинились!'})
-    return jsonify({'message': 'Неправильный пароль или никнейм!'}), HTTPStatus.UNAUTHORIZED
+    raise InvalidAPIUsage(
+                'Неправильный пароль или никнейм!',
+                HTTPStatus.UNAUTHORIZED
+    )
 
 
 @app.route('/api/logout', methods=['POST'])
@@ -110,10 +114,16 @@ def change_password():
     user_id = current_user.id
     user = User.query.get(user_id)
     if not user:
-        return jsonify({'error': 'Пользователь не найден'}), HTTPStatus.NOT_FOUND
+        raise InvalidAPIUsage(
+                    'Пользователь не найден',
+                    HTTPStatus.NOT_FOUND
+        )
     data = request.get_json()
     if 'new_password' not in data:
-        return jsonify({'error': 'Не указан новый пароль'}), HTTPStatus.BAD_REQUEST
+        raise InvalidAPIUsage(
+                    'Не указан новый пароль',
+                    HTTPStatus.BAD_REQUEST
+        )
     user.password = data['new_password']
     db.session.commit()
     return jsonify({'message': 'Пароль успешно изменен'})
