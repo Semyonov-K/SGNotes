@@ -13,6 +13,19 @@ class User(db.Model, UserMixin):
 
     def __repr__(self):
         return '<Пользователь %r>' % (self.username)
+    
+    def to_dict(self):
+        return dict(
+            id = self.id,
+            username = self.username,
+            password = self.password,
+            role = 'user'
+        )
+    
+    def from_dict(self, data):
+        for field in ['username', 'password']:
+            if field in data:
+                setattr(self, field, data[field]) 
 
 
 class Note(db.Model):
@@ -60,6 +73,6 @@ class Note(db.Model):
         )
     
     def from_dict(self, data):
-        for field in ['title', 'text', 'source', 'added_by']:
+        for field in ['title', 'text', 'timestamp', 'deadline', 'is_done']:
             if field in data:
                 setattr(self, field, data[field]) 
