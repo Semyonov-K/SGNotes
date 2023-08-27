@@ -69,10 +69,10 @@ class Note(db.Model):
             text = self.text,
             timestamp = self.timestamp,
             deadline = self.deadline,
-            is_done = self.is_done
+            is_done = self.is_done,
         )
     
     def from_dict(self, data):
-        for field in ['title', 'text', 'timestamp', 'deadline', 'is_done']:
+        for field in ['title', 'text', 'timestamp', 'deadline', 'is_done',]:
             if field in data:
                 setattr(self, field, data[field]) 

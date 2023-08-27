@@ -1,49 +1,42 @@
-from flask import jsonify, request
-from flask_login import login_user, login_required, logout_user, current_user
+from flask import jsonify, request, g, session
+from flask_login import login_user, logout_user, current_user
 from functools import wraps
 from http import HTTPStatus
 import json
+from datetime import datetime
 
 from . import app, db
 from .models import Note, User
 from .error_handlers import InvalidAPIUsage
 
 
-def check_authentication(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if current_user.is_authenticated:
-            return func(*args, **kwargs)
-        else:
-            response = {
-                'error': 'Вы не авторизованы'
-            }
-            return json.dumps(response), HTTPStatus.UNAUTHORIZED, {'Content-Type': 'application/json'}
-    return wrapper
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('user'):
+            return jsonify({'message': 'Неавторизованный доступ'}), HTTPStatus.UNAUTHORIZED
+        g.user = User.query.get(session['user'])
+        return f(*args, **kwargs)
+    return decorated_function
 
 
 @app.route('/api/notes/<int:id>/', methods=['GET'])
 @login_required
-@check_authentication
 def api_get_note(id):
-    if current_user.is_authenticated:
-        note = Note.query.get(id)
-        if note is None:
-            raise InvalidAPIUsage(
-                'Заметка не найдена',
-                HTTPStatus.NOT_FOUND
-            )
-        return jsonify({'note': note.to_dict()}), HTTPStatus.OK
-    else:
-        return jsonify({'message': 'Не авторизован'}), HTTPStatus.UNAUTHORIZED
+    note = Note.query.filter_by(id=id, user=g.user).first()
+    if note is None:
+        raise InvalidAPIUsage(
+            'Заметка не найдена',
+            HTTPStatus.NOT_FOUND
+        )
+    return jsonify({'note': note.to_dict()}), HTTPStatus.OK
 
 
 @app.route('/api/notes/<int:id>/', methods=['PATCH'])
 @login_required
-@check_authentication
 def api_update_note(id):
     data = request.get_json()
-    note = Note.query.get(id)
+    note = Note.query.filter_by(id=id, user=g.user).first()
     if note is None:
         raise InvalidAPIUsage(
             'Заметка не найдена',
@@ -51,17 +44,21 @@ def api_update_note(id):
         )
     note.title = data.get('title', note.title)
     note.text = data.get('text', note.text)
-    note.source = data.get('source', note.source)
-    note.added_by = data.get('added_by', note.added_by)
+    note.is_done = data.get('is_done', note.is_done)
+    if 'deadline' in data:
+        deadline = data['deadline']
+        if deadline is None:
+            note.deadline = None
+        else:
+            note.set_deadline(deadline)
     db.session.commit()  
     return jsonify({'note': note.to_dict()}), HTTPStatus.CREATED
 
 
 @app.route('/api/notes/<int:id>/', methods=['DELETE'])
 @login_required
-@check_authentication
 def api_delete_note(id):
-    note = Note.query.get(id)
+    note = Note.query.filter_by(id=id, user=g.user).first()
     if note is None:
         raise InvalidAPIUsage(
             'Заметка не найдена',
@@ -74,22 +71,23 @@ def api_delete_note(id):
 
 @app.route('/api/notes/', methods=['GET'])
 @login_required
-@check_authentication
 def api_get_notes():
-    notes = Note.query.all()  
+    notes = Note.query.filter_by(user=g.user).all()  
     notes_list = [note.to_dict() for note in notes]
     return jsonify({'notes': notes_list}), HTTPStatus.OK
 
 
 @app.route('/api/add_note/', methods=['POST'])
 @login_required
-@check_authentication
 def api_add_note():
     data = request.get_json()
     if 'title' not in data or 'text' not in data:
         raise InvalidAPIUsage('В запросе отсутствуют обязательные поля')
     note = Note()
     note.from_dict(data)
+    if 'deadline' in data:
+        note.set_deadline(data['deadline'])
+    note.user_id = session['user']
     db.session.add(note)
     db.session.commit()
     return jsonify({'note': note.to_dict()}), HTTPStatus.CREATED
@@ -104,6 +102,8 @@ def api_register():
             'Такой пользователь уже существует!',
             HTTPStatus.BAD_REQUEST
         )
+    if not data['username'] or not data['password']:
+        return jsonify({'message': 'Некорректные данные'}), HTTPStatus.BAD_REQUEST
     user = User()
     user.from_dict(data)
     db.session.add(user)
@@ -117,6 +117,7 @@ def api_login():
     user = User.query.filter_by(username=data['username']).first()
     if user and user.password == data['password']:
         login_user(user)
+        session['user'] = user.id
         return jsonify({'message': 'Вы успешно залогинились!'})
     raise InvalidAPIUsage(
                 'Неправильный пароль или никнейм!',
@@ -126,15 +127,14 @@ def api_login():
 
 @app.route('/api/logout', methods=['POST'])
 @login_required
-@check_authentication
 def api_logout():
     logout_user()
+    session.pop('user', None)
     return jsonify({'message': 'Вы вышли из профиля'})
 
 
 @app.route('/api/change_password', methods=['GET', 'POST'])
 @login_required
-@check_authentication
 def api_change_password():
     user_id = current_user.id
     user = User.query.get(user_id)

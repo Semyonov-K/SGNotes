@@ -10,9 +10,7 @@ from datetime import datetime
 
 @app.route('/main-page', methods=['GET', 'POST'])
 def main_page():
-    user_id = current_user.id
-    username = User.query.get(user_id)
-    return render_template('main.html', username=username.username)
+    return render_template('main.html')
 
 
 @app.route('/', methods=['GET', 'POST'])
